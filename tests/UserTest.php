@@ -33,6 +33,12 @@ class UserTest extends TestCase
 		$this->delete('user/1')->seeJson(['deleted'=>true]);        	
     }
 
+    public function testValidationErrorOnCreateUser()
+    {
+    	$data = $this->getData(['name'=>'', 'email'=>'jane']);
+    	$this->post('/user', $data)->dump();
+    }
+
     public function getData($custom = array())
     {
     	$data = [
@@ -43,4 +49,9 @@ class UserTest extends TestCase
     	$data = array_merge($data, $custom);
     	return $data;
     }
+
+	public function testNotFoundUser()
+    {
+        $this->get('user/10')->seeJsonEquals(['error' => 'Model not found']);
+    }    
 }

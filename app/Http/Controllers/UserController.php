@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return User::all();
     }
 
     /**
@@ -38,8 +38,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        User::create($request->all());
-        return ['created' => true];
+        //Reglas de validacion
+        $rules = [
+            'name'      => 'required',
+            'email'     => 'required|email',
+            'password'  => 'required'
+            ];
+
+        try {
+            //ejecucion de validador
+            $validator  = \Validator::make($request->all(), $rules);
+            if($validator->fails()){
+                return [
+                    'created'   => false,
+                    'errors'    => $validator->errors()->all()
+                ];
+            }
+            User::create($request->all());
+            return ['created' => true];
+        } catch (Exception $e) {
+            \Log::info('Error creating user:'.$e);
+            return \Response::json(['created' => false], 500);
+        }
     }
 
     /**
@@ -48,9 +68,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        return User::find($id);
+        return $user;
     }
 
     /**
