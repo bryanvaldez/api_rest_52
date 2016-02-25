@@ -109,4 +109,8 @@ class UserController extends Controller
         User::destroy($id);
         return ['deleted'=> true];
     }
+
+    public function names(){
+        return user::all()->lists('name');
+    }
 }

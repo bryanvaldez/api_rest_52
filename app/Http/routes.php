@@ -37,5 +37,18 @@ Route::group(['middleware' => ['web']], function () {
 |--------------------------------------------------------------------------
 |
 */
+Route::group(['prefix' => 'v1'], function(){
+	Route::resource('user', 'UserController',
+		['only' => ['index','store','update','destroy','show']]);
+});
 
-Route::resource('user', 'UserController',['only'=>['index','store','update','destroy','show']]);
+Route::group(['prefix' => 'v2'], function(){
+	Route::resource('user', 'UserController',
+		['only' => ['index','store','update','destroy','show']]);
+	Route::get('users/names', 'UserController@names');
+});
+
+
+
+//http://localhost/apirest/public/v1/user
+//name , email. password
