@@ -41,7 +41,7 @@ class UserController extends Controller
         //Reglas de validacion
         $rules = [
             'name'      => 'required',
-            'email'     => 'required|email',
+            'email'     => 'required|email|unique:users',
             'password'  => 'required'
             ];
 
